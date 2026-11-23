@@ -1,0 +1,212 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Панель деканата</title>
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        header {
+            background: #173b70;
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 25px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            overflow-x: auto;
+        }
+
+        h2 { color: #173b70; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 650px;
+        }
+
+        th, td {
+            padding: 13px 10px;
+            border-bottom: 1px solid #e2e8f0;
+            text-align: left;
+        }
+
+        th {
+            background: #e8f0fe;
+            color: #173b70;
+        }
+
+        select, button {
+            padding: 9px;
+            border-radius: 6px;
+            border: 1px solid #cbd5e1;
+        }
+
+        button {
+            background: #173b70;
+            color: white;
+            cursor: pointer;
+            border: none;
+            margin-top: 5px;
+        }
+
+        button:hover { background: #24549a; }
+
+        .empty {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+        }
+
+        .languages {
+            text-align: right;
+            margin: 15px auto;
+            max-width: 1000px;
+        }
+
+        .languages a {
+            color: #173b70;
+            margin-left: 12px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .message {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 12px;
+            border-radius: 7px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>
+        {% if lang == 'kk' %}
+            Деканаттың басқару панелі
+        {% else %}
+            Панель управления деканатом
+        {% endif %}
+    </h1>
+    <p>
+        {% if lang == 'kk' %}
+            Электрондық кезекті басқару
+        {% else %}
+            Управление электронной очередью
+        {% endif %}
+    </p>
+</header>
+
+<div class="languages">
+    <a href="/operator?lang=ru">Русский</a>
+    <a href="/operator?lang=kk">Қазақша</a>
+</div>
+
+<main class="container">
+
+    <h2>
+        {% if lang == 'kk' %}
+            Студенттер кезегі
+        {% else %}
+            Очередь студентов
+        {% endif %}
+    </h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <div class="message">{{ message }}</div>
+        {% endfor %}
+    {% endwith %}
+
+    {% if tickets %}
+    <table>
+        <thead>
+            <tr>
+                <th>№</th>
+                <th>
+                    {% if lang == 'kk' %}Студент{% else %}Студент{% endif %}
+                </th>
+                <th>
+                    {% if lang == 'kk' %}Қызмет{% else %}Услуга{% endif %}
+                </th>
+                <th>
+                    {% if lang == 'kk' %}Күйі{% else %}Статус{% endif %}
+                </th>
+                <th>
+                    {% if lang == 'kk' %}Әрекет{% else %}Действие{% endif %}
+                </th>
+            </tr>
+        </thead>
+
+        <tbody>
+        {% for ticket in tickets %}
+            <tr>
+                <td><strong>{{ ticket["ticket_number"] }}</strong></td>
+                <td>{{ ticket["full_name"] }}</td>
+                <td>{{ ticket["service"] }}</td>
+                <td>
+                    {% if ticket["status"] == "waiting" %}
+                        {% if lang == 'kk' %}Күтуде{% else %}Ожидает{% endif %}
+                    {% elif ticket["status"] == "serving" %}
+                        {% if lang == 'kk' %}Қабылдануда{% else %}Обслуживается{% endif %}
+                    {% else %}
+                        {% if lang == 'kk' %}Аяқталды{% else %}Завершён{% endif %}
+                    {% endif %}
+                </td>
+                <td>
+                    <form method="POST"
+                          action="{{ url_for('operator_update', ticket_id=ticket['id']) }}">
+                        <select name="status">
+                            <option value="waiting"
+                                {% if ticket["status"] == "waiting" %}selected{% endif %}>
+                                Ожидает
+                            </option>
+                            <option value="serving"
+                                {% if ticket["status"] == "serving" %}selected{% endif %}>
+                                Обслуживается
+                            </option>
+                            <option value="done"
+                                {% if ticket["status"] == "done" %}selected{% endif %}>
+                                Завершён
+                            </option>
+                        </select>
+                        <button type="submit">
+                            {% if lang == 'kk' %}Сақтау{% else %}Сохранить{% endif %}
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% else %}
+        <div class="empty">
+            {% if lang == 'kk' %}
+                Әзірге кезекте студенттер жоқ.
+            {% else %}
+                Пока в очереди нет студентов.
+            {% endif %}
+        </div>
+    {% endif %}
+
+</main>
+</body>
+</html>
