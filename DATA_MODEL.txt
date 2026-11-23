@@ -1,0 +1,18 @@
+ДИАГРАММА ДАННЫХ (ER)
+STUDENTS (1) -------- (N) TICKETS (N) -------- (1) SERVICES
+
+students:
+- id: INTEGER PRIMARY KEY
+- full_name: TEXT NOT NULL
+
+services:
+- id: INTEGER PRIMARY KEY
+- title: TEXT NOT NULL UNIQUE
+
+tickets:
+- id: INTEGER PRIMARY KEY
+- student_id: INTEGER NOT NULL, FK -> students.id
+- service_id: INTEGER NOT NULL, FK -> services.id
+- ticket_number: INTEGER NOT NULL
+- status: TEXT NOT NULL
+- created_at: TEXT NOT NULL
