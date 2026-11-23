@@ -1,0 +1,111 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ваш талон — Деканат</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #eef2f7;
+            font-family: Arial, sans-serif;
+            color: #1e293b;
+        }
+        .ticket {
+            max-width: 450px;
+            margin: 50px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 5px 25px #00000012;
+        }
+        h1 { color: #173b70; }
+        .number {
+            margin: 25px 0;
+            padding: 20px;
+            background: #e8f0fe;
+            color: #173b70;
+            border-radius: 12px;
+            font-size: 55px;
+            font-weight: bold;
+        }
+        .info {
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0;
+            text-align: left;
+        }
+        .wait {
+            margin: 20px 0;
+            color: #475569;
+        }
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 13px 25px;
+            background: #173b70;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+<div class="ticket">
+    <h1>
+        {% if lang == 'kk' %}
+            Сіздің талоныңыз
+        {% else %}
+            Ваш электронный талон
+        {% endif %}
+    </h1>
+
+    <p>
+        {% if lang == 'kk' %}
+            Кезек нөмірі
+        {% else %}
+            Ваш номер очереди
+        {% endif %}
+    </p>
+
+    <div class="number">{{ ticket["ticket_number"] }}</div>
+
+    <div class="info">
+        <strong>
+            {% if lang == 'kk' %}Аты-жөні{% else %}Студент{% endif %}:
+        </strong>
+        {{ ticket["full_name"] }}
+    </div>
+
+    <div class="info">
+        <strong>
+            {% if lang == 'kk' %}Қызмет{% else %}Услуга{% endif %}:
+        </strong>
+        {{ ticket["service_title"] }}
+    </div>
+
+    <div class="wait">
+        {% if lang == 'kk' %}
+            Шамамен күту уақыты:
+        {% else %}
+            Примерное время ожидания:
+        {% endif %}
+        <strong>{{ wait }} мин.</strong>
+    </div>
+
+    <p>
+        {% if lang == 'kk' %}
+            Кезегіңізді күтіңіз
+        {% else %}
+            Пожалуйста, ожидайте своей очереди
+        {% endif %}
+    </p>
+
+    <a href="/">
+        {% if lang == 'kk' %}Басты бет{% else %}На главную{% endif %}
+    </a>
+</div>
+</body>
+</html>
