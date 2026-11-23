@@ -1,0 +1,223 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Электронная очередь деканата</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        header {
+            background: #173b70;
+            color: white;
+            padding: 25px 15px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0 0 10px;
+            font-size: 25px;
+        }
+
+        header p {
+            margin: 0;
+            color: #dbeafe;
+        }
+
+        .languages {
+            text-align: right;
+            max-width: 600px;
+            margin: 20px auto 0;
+            padding: 0 15px;
+        }
+
+        .languages a {
+            color: #173b70;
+            text-decoration: none;
+            font-weight: bold;
+            margin-left: 12px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 25px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 5px 20px #00000010;
+        }
+
+        h2 {
+            color: #173b70;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin: 18px 0 8px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background: #173b70;
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #24549a;
+        }
+
+        .message {
+            padding: 12px;
+            background: #fee2e2;
+            color: #991b1b;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #64748b;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>
+        {% if lang == 'kk' %}
+            Деканаттың электрондық кезегі
+        {% else %}
+            Электронная очередь деканата
+        {% endif %}
+    </h1>
+    <p>
+        {% if lang == 'kk' %}
+            Кезекке онлайн тіркеліңіз
+        {% else %}
+            Запишитесь в очередь онлайн
+        {% endif %}
+    </p>
+</header>
+
+<div class="languages">
+    <a href="/?lang=ru">Русский</a>
+    <a href="/?lang=kk">Қазақша</a>
+</div>
+
+<main class="container">
+    <h2>
+        {% if lang == 'kk' %}
+            Кезекке тұру
+        {% else %}
+            Получить талон
+        {% endif %}
+    </h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <div class="message">{{ message }}</div>
+        {% endfor %}
+    {% endwith %}
+
+    <form action="{{ url_for('ticket_create') }}" method="POST">
+
+        <label for="name">
+            {% if lang == 'kk' %}
+                Аты-жөніңіз
+            {% else %}
+                Ваше имя и фамилия
+            {% endif %}
+        </label>
+
+        <input
+            type="text"
+            id="name"
+            name="name"
+            minlength="2"
+            maxlength="80"
+            placeholder="Иван Иванов"
+            required
+        >
+
+        <label for="service">
+            {% if lang == 'kk' %}
+                Қажетті қызмет
+            {% else %}
+                Выберите услугу
+            {% endif %}
+        </label>
+
+        <select id="service" name="service" required>
+            <option value="" disabled selected>
+                {% if lang == 'kk' %}
+                    Қызметті таңдаңыз
+                {% else %}
+                    Выберите услугу
+                {% endif %}
+            </option>
+
+            <option value="Справки / Анықтамалар">
+                Справки / Анықтамалар
+            </option>
+
+            <option value="Академические вопросы / Академиялық сұрақтар">
+                Академические вопросы / Академиялық сұрақтар
+            </option>
+
+            <option value="Расписание / Сабақ кестесі">
+                Расписание / Сабақ кестесі
+            </option>
+
+            <option value="Другие вопросы / Басқа сұрақтар">
+                Другие вопросы / Басқа сұрақтар
+            </option>
+        </select>
+
+        <button type="submit">
+            {% if lang == 'kk' %}
+                Талон алу
+            {% else %}
+                Получить электронный талон
+            {% endif %}
+        </button>
+
+    </form>
+</main>
+
+<footer>
+    Электронная очередь деканата
+    <br>
+    Система обслуживания студентов
+</footer>
+
+</body>
+</html>
