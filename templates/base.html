@@ -1,0 +1,8 @@
+<!doctype html><html lang="{{ 'kk' if lang=='kk' else 'ru' }}"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Qabылдау — электронная очередь</title><link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head><body><header class="top"><a class="brand" href="/"><img class="university-logo" src="{{ url_for('static', filename='korkyt_ata_logo.jpg') }}" alt="Korkyt Ata University"><span class="brand-caption">ЭЛЕКТРОННАЯ ОЧЕРЕДЬ<br><small>ДЕКАНАТ УНИВЕРСИТЕТА</small></span></a>
+<nav><a href="/">Главная</a><a href="/operator">Панель оператора</a>
+<a href="/?lang=ru">RU</a><a href="/?lang=kk">ҚАЗ</a></nav></header>
+<main>{% with messages=get_flashed_messages() %}{% for m in messages %}<div class="alert">{{m}}</div>{% endfor %}{% endwith %}
+{% block content %}{% endblock %}</main><footer>Электронная очередь деканата · Учебный проект</footer></body></html>
